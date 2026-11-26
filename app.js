@@ -425,8 +425,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           });
 
+          const result = await response.json().catch(() => ({}));
+
           if (!response.ok) {
-            throw new Error(`Submission failed with status ${response.status}`);
+            const apiMsg = Array.isArray(result.errors)
+              ? result.errors.map(err => err.message).join(', ')
+              : (result.error || `Submission failed (${response.status})`);
+            throw new Error(apiMsg);
           }
 
           openTicketModal({
@@ -440,8 +445,9 @@ document.addEventListener('DOMContentLoaded', () => {
           intakeForm.reset();
           syncBookingServiceOptions();
         } catch (err) {
+          console.error('Ticket submission error:', err);
           if (formStatusMsg) {
-            formStatusMsg.textContent = 'Could not submit your ticket right now. Please try again or email support@reloadelectronics.com.';
+            formStatusMsg.textContent = `Could not submit ticket: ${err.message}. Please try again or email support@reloadelectronics.com.`;
             formStatusMsg.classList.remove('hidden');
           }
         } finally {
