@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // -------------------------------------------------------------
   // Sign up at https://formspree.io with support@reloadelectronics.com,
   // create a form, and replace YOUR_FORMSPREE_ID below with your form ID.
-  const FORMSPREE_ENDPOINT = https://formspree.io/f/xkjrklbo;
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xkjrklbo';
 
   const intakeForm = document.getElementById('intakeForm');
   const submitTicketBtn = document.getElementById('submitTicketBtn');
