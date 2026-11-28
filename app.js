@@ -315,7 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const customIssueInput = document.getElementById('customIssueInput');
 
   if (bookDiagnosticBtn) {
-    bookDiagnosticBtn.addEventListener('click', () => {
+    bookDiagnosticBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       const serviceRequestedSelect = document.getElementById('serviceRequested');
       const issueNotesField = document.getElementById('issueNotes');
       const fullNameField = document.getElementById('fullName');
