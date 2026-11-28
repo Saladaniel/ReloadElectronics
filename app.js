@@ -255,10 +255,22 @@ document.addEventListener('DOMContentLoaded', () => {
     syncBookingServiceOptions();
   }
 
+  function scrollToBookingForm(ringColorClass) {
+    const bookingSection = document.getElementById('booking');
+    if (!bookingSection) return;
+    bookingSection.scrollIntoView({ behavior: 'smooth' });
+    const formCard = bookingSection.querySelector('form');
+    if (formCard) {
+      formCard.parentElement.classList.add('ring-2', ringColorClass);
+      setTimeout(() => {
+        formCard.parentElement.classList.remove('ring-2', ringColorClass);
+      }, 1500);
+    }
+  }
+
   // "Book With This Quote" button transfers selection to booking form
   if (bookQuoteBtn) {
     bookQuoteBtn.addEventListener('click', () => {
-      const bookingSection = document.getElementById('booking');
       const deviceModelSelect = document.getElementById('deviceModel');
       const serviceRequestedSelect = document.getElementById('serviceRequested');
       const fulfillmentMethodSelect = document.getElementById('fulfillmentMethod');
@@ -294,16 +306,37 @@ document.addEventListener('DOMContentLoaded', () => {
         fulfillmentMethodSelect.value = methodRadio.value === 'mailin' ? 'Nationwide Mail-In' : 'Local Drop-Off';
       }
 
-      // Scroll to booking form
-      if (bookingSection) {
-        bookingSection.scrollIntoView({ behavior: 'smooth' });
-        const formCard = bookingSection.querySelector('form');
-        if (formCard) {
-          formCard.parentElement.classList.add('ring-2', 'ring-sky-500');
-          setTimeout(() => {
-            formCard.parentElement.classList.remove('ring-2', 'ring-sky-500');
-          }, 1500);
-        }
+      scrollToBookingForm('ring-sky-500');
+    });
+  }
+
+  // "Book $25 Diagnostic" button transfers custom issue description to booking form
+  const bookDiagnosticBtn = document.getElementById('bookDiagnosticBtn');
+  const customIssueInput = document.getElementById('customIssueInput');
+
+  if (bookDiagnosticBtn) {
+    bookDiagnosticBtn.addEventListener('click', () => {
+      const serviceRequestedSelect = document.getElementById('serviceRequested');
+      const issueNotesField = document.getElementById('issueNotes');
+      const fullNameField = document.getElementById('fullName');
+
+      syncBookingServiceOptions();
+
+      if (serviceRequestedSelect) {
+        serviceRequestedSelect.value = 'Custom Issue & Diagnostic ($25 Fee)';
+      }
+
+      const customNotes = customIssueInput ? customIssueInput.value.trim() : '';
+      if (issueNotesField && customNotes) {
+        issueNotesField.value = customNotes;
+      }
+
+      scrollToBookingForm('ring-emerald-500');
+
+      if (customNotes && fullNameField) {
+        fullNameField.focus({ preventScroll: true });
+      } else if (issueNotesField) {
+        issueNotesField.focus({ preventScroll: true });
       }
     });
   }
